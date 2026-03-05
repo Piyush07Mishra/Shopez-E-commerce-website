@@ -6,6 +6,12 @@ import { ShopContext } from '../context/ShopContext';
 const NavBar = () => {
     const [visible, setVisible] = useState(false);
     const {setShowSearch, getCartCount, navigate, token, setToken, setCartItems} = useContext(ShopContext);
+
+    const openSearch = () => {
+      navigate('/collection');
+      setShowSearch(true);
+    };
+
     const logout = () => {
       navigate('/login')
       localStorage.removeItem('token')
@@ -47,10 +53,10 @@ const NavBar = () => {
 
       {/* Profile and Cart */}
       <div className="flex items-center gap-6">
-        <img onClick={() => setShowSearch(true)} src={assets.search_icon} className="w-5 cursor-pointer" alt="Search" />
+        <img onClick={openSearch} src={assets.search_icon} className="w-5 cursor-pointer" alt="Search" />
 
         <div className="group relative">
-          <img onClick={() => token ? null : navigate('/login')} className="w-5 cursor-pointer" src={assets.profile_icon} alt="Profile" />
+          <img onClick={() => !token && navigate('/login')} className="w-5 cursor-pointer" src={assets.profile_icon} alt="Profile" />
           {token && <div className="hidden group-hover:block absolute right-0 pt-4 bg-white shadow-md rounded">
             <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded">
               <p className="cursor-pointer hover:text-black">My Profile</p>
