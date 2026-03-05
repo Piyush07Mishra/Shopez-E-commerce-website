@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
 import { assets } from '../assets/assets';
-import RelatedProducts from '../components/RelatedProducts';
+import RelatedProducts from '../components/Relatedproducts';
 
 const Product = () => {
   const { productId } = useParams();
@@ -15,13 +15,27 @@ const Product = () => {
     const product = products.find((item) => item._id === productId);
     if (product) {
       setProductData(product);
-      setImage(product.images[0]); // Assuming `image` is an array of URLs
+      const productImages = Array.isArray(product.image)
+        ? product.image
+        : Array.isArray(product.images)
+          ? product.images
+          : [];
+      setImage(productImages[0] || '');
+    } else {
+      setProductData(null);
+      setImage('');
     }
   };
 
   useEffect(() => {
     fetchProductData();
   }, [productId, products]);
+
+  const productImages = Array.isArray(productData?.image)
+    ? productData.image
+    : Array.isArray(productData?.images)
+      ? productData.images
+      : [];
 
   return productData ? (
     <div className="border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100">
@@ -31,7 +45,7 @@ const Product = () => {
         <div className="flex-1 flex flex-col sm:flex-row gap-3">
           {/* Thumbnails */}
           <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-auto sm:w-[20%] w-full gap-2">
-            {productData.images.map((item, index) => (
+            {productImages.map((item, index) => (
               <img
                 onClick={() => setImage(item)}
                 src={item}
@@ -45,7 +59,7 @@ const Product = () => {
           </div>
           {/* Main Image */}
           <div className="w-full sm:w-[80%]">
-            <img src={image} className="w-full h-auto border border-gray-200" alt="Main Product" />
+            <img src={image || productImages[0] || ''} className="w-full h-auto border border-gray-200" alt="Main Product" />
           </div>
         </div>
 
@@ -68,7 +82,7 @@ const Product = () => {
           <div className="flex flex-col gap-4 my-8">
             <p>Select Size</p>
             <div className="flex gap-2">
-              {productData.sizes.map((item, index) => (
+              {(productData.sizes || []).map((item, index) => (
                 <button
                   onClick={() => setSize(item)}
                   key={index}

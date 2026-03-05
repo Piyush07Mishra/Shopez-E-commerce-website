@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom';
+import { products as mockProducts } from '../assets/assets';
 
 
 
@@ -103,17 +104,24 @@ const ShopContextProvider = (props) => {
 
     const getProductsData = async () => {
         try {
-            const response = await axios.get(backendUrl + '/api/product/list')
-            if(response.data.success){
-                setProducts(response.data.products);
+            if(backendUrl) {
+                const response = await axios.get(backendUrl + '/api/product/list')
+                if(response.data.success){
+                    setProducts(response.data.products);
+                }
+                else{
+                    toast.error(response.data.message)
+                }
             }
-            else{
-                toast.error(response.data.message)
+            else {
+                // Use mock products from assets until backend is ready
+                setProducts(mockProducts);
             }
         }
         catch (error){
             console.log(error)
-            toast.error(error.message)
+            // Fallback to mock products if API fails
+            setProducts(mockProducts);
         }
     }
 
