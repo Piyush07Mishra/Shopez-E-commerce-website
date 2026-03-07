@@ -152,6 +152,3 @@ npm run dev
 
 Piyush Mishra
 
-## License
-
-ISC
