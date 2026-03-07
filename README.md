@@ -150,5 +150,5 @@ npm run dev
 
 ## Author
 
-Piyush Mishra
+Piyush Mishra , Pranav Chinthala , Diksha Jadhav, Pranav Nagur
 
