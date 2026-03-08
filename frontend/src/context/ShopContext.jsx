@@ -15,7 +15,7 @@ const ShopContextProvider = (props) => {
     console.log(backendUrl)
     const [search, setSearch] = useState('');
     const [showSearch, setShowSearch] = useState(false);
-    const [cartItems, setCartItems] = useState([]);
+    const [cartItems, setCartItems] = useState({});
     const [products, setProducts] = useState([])
     const [token, setToken] = useState('')
     const navigate = useNavigate();
@@ -76,7 +76,7 @@ const ShopContextProvider = (props) => {
         setCartItems(cartData);
         if(token){
             try{
-                await axios.post(backendUrl + 'api/cart/update', {itemId, size, quantity}, {headers: {token}})
+                await axios.post(backendUrl + '/api/cart/update', {itemId, size, quantity}, {headers: {token}})
             }
             catch(error){
                 console.log(error);
@@ -129,7 +129,7 @@ const ShopContextProvider = (props) => {
         try{
             const response = await axios.post(backendUrl + '/api/cart/get', {}, {headers: {token}})
             if(response.data.success){
-                setCartItems(response.data.cartData);
+                setCartItems(response.data.cartData || response.data.message || {});
             }
         }
         catch (error){
